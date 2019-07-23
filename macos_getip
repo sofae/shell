@@ -1,0 +1,10 @@
+echo outside ip
+curl http://members.3322.org/dyndns/getip
+
+echo local ip
+ifconfig en0|sed -n '4p'|awk -F "inet" '{print $2}'|awk -F " " '{print $1}'
+
+echo gateway
+netstat -rn | grep default | awk -F " " '{print $2}'
+
+traceroute -m 6 114.114.114.114
