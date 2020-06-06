@@ -218,7 +218,7 @@ server {
 
     root /usr/share/nginx/html;
     location / {
-        proxy_pass http://www.zhuizishu.com/;
+        proxy_pass https://news.163.com/;
     }
 
     location ${path} {
