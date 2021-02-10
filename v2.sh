@@ -96,7 +96,7 @@ function preinstall()
 function installV2ray()
 {
     echo 安装v2ray...
-    bash <(curl -L -s https://install.direct/go.sh)
+    bash <(curl -L -s https://github.com/v2fly/fhs-install-v2ray)
 
     if [ ! -f /etc/v2ray/config.json ]; then
         echo "安装失败"
