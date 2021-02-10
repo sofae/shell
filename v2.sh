@@ -98,29 +98,29 @@ function installV2ray()
     echo 安装v2ray...
     bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 
-    if [ ! -f /etc/v2ray/config.json ]; then
+    if [ ! -f /usr/local/etc/v2ray/config.json ]; then
         echo "安装失败"
         exit 1
     fi
 
-    logsetting=`cat /etc/v2ray/config.json|grep loglevel`
+    logsetting=`cat /usr/local/etc/v2ray/config.json|grep loglevel`
     if [ "${logsetting}" = "" ]; then
-        sed -i '1a\  "log": {\n    "loglevel": "info",\n    "access": "/var/log/v2ray/access.log",\n    "error": "/var/log/v2ray/error.log"\n  },' /etc/v2ray/config.json
+        sed -i '1a\  "log": {\n    "loglevel": "info",\n    "access": "/var/log/v2ray/access.log",\n    "error": "/var/log/v2ray/error.log"\n  },' /usr/local/etc/v2ray/config.json
     fi
     alterid=`shuf -i50-90 -n1`
-    sed -i -e "s/alterId\":.*[0-9]*/alterId\": ${alterid}/" /etc/v2ray/config.json
-    uid=`cat /etc/v2ray/config.json | grep id | cut -d: -f2 | tr -d \",' '`
-    port=`cat /etc/v2ray/config.json | grep port | cut -d: -f2 | tr -d \",' '`
+    sed -i -e "s/alterId\":.*[0-9]*/alterId\": ${alterid}/" /usr/local/etc/v2ray/config.json
+    uid=`cat /usr/local/etc/v2ray/config.json | grep id | cut -d: -f2 | tr -d \",' '`
+    port=`cat /usr/local/etc/v2ray/config.json | grep port | cut -d: -f2 | tr -d \",' '`
     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
     ntpdate -u time.nist.gov
-    res=`cat /etc/v2ray/config.json | grep streamSettings`
+    res=`cat /usr/local/etc/v2ray/config.json | grep streamSettings`
     if [ "$res" = "" ]; then
-        line=`grep -n '}]' /etc/v2ray/config.json  | head -n1 | cut -d: -f1`
+        line=`grep -n '}]' /usr/local/etc/v2ray/config.json  | head -n1 | cut -d: -f1`
         line=`expr ${line} - 1`
-        sed -i "${line}s/}/},/" /etc/v2ray/config.json
-        sed -i "${line}a\    \"streamSettings\": {\n      \"network\": \"ws\",\n      \"wsSettings\": {\n        \"path\": \"${path}\"\n      }\n    },\n    \"listen\": \"127.0.0.1\"" /etc/v2ray/config.json
+        sed -i "${line}s/}/},/" /usr/local/etc/v2ray/config.json
+        sed -i "${line}a\    \"streamSettings\": {\n      \"network\": \"ws\",\n      \"wsSettings\": {\n        \"path\": \"${path}\"\n      }\n    },\n    \"listen\": \"127.0.0.1\"" /usr/local/etc/v2ray/config.json
     else
-        sed -i -e "s/path\":.*/path\": \"\\${path}\"/" /etc/v2ray/config.json
+        sed -i -e "s/path\":.*/path\": \"\\${path}\"/" /usr/local/etc/v2ray/config.json
     fi
     systemctl enable v2ray && systemctl restart v2ray
     echo "安装成功！"
