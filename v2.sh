@@ -139,6 +139,7 @@ function installNginx()
         echo -e " pip3安装失败"
         exit 1
     fi
+    pip3 install --upgrade pip
     pip3 install certbot
     res=`which certbot`
     if [ "$?" != "0" ]; then
